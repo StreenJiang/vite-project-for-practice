@@ -98,13 +98,13 @@ const toggled = (menuId) => toggledId.value === menuId;
                 class="sub-menu-size relative z-30"
                 @mouseenter="liMouseEnter($event, index)" @mouseleave="liMouseLeave" 
                 @mousedown="liMouseDown(index)" @mouseup="liMouseUp(index)" @click="liClick($event, index)"/>
-      <div ref="slider" class="sub-menu-size rounded-xl bg-cyan-500 transition-all ease-out duration-300 absolute z-20" style="left: 0px; top: 0px"></div>
-      <div ref="hoverSlider" class="sub-menu-size rounded-xl bg-cyan-500 transition-all ease-out duration-300 absolute z-10 opacity-0" style="left: 0px; top: 0px"></div>
+      <div ref="slider" class="sub-menu-size rounded-xl bg-gray-400 transition-all ease-out duration-300 absolute z-20" style="left: 0px; top: 0px"></div>
+      <div ref="hoverSlider" class="sub-menu-size rounded-xl bg-gray-400 transition-all ease-out duration-300 absolute z-10 opacity-0" style="left: 0px; top: 0px"></div>
   </nav>
 </template>
 
 <style scoped>
 .sub-menu-size {
-    @apply min-w-52 w-min h-12 m-3;
+    @apply min-w-48 w-min h-12 m-3;
 }
 </style>

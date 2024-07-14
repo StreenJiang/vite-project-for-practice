@@ -24,14 +24,14 @@ onMounted(() => {
     IconSvg.value = defineAsyncComponent(() => import(iconPath));
 });
 
-const iconColor = computed(() => props.toggled ? "fill-cyan-900" : "fill-cyan-500");
-const textColor = computed(() => props.toggled ? "text-cyan-900" : "text-cyan-500");
+const iconColor = computed(() => props.toggled ? "fill-gray-800" : "fill-gray-400");
+const textColor = computed(() => props.toggled ? "text-gray-800" : "text-gray-400");
 const showToggleBar = computed(() => props.toggled ? "opacity-100 w-2" : "opacity-0 w-0");
 </script>
 
 <template>
     <router-link :to="menu.routeTo" class="m-2 rounded-xl h-12 w-52 hover:cursor-pointer transition-all duration-300 select-none flex">
-        <div class="h-7 w-2 bg-cyan-900 rounded-full ml-3 mr-1 my-auto transition-all duration-300" :class="showToggleBar"></div>
+        <div class="h-6 w-2 bg-gray-800 rounded-full ml-3 mr-1 my-auto transition-all duration-300" :class="showToggleBar"></div>
         <component :is="IconSvg" class="icon size-7 duration-300 mx-3 my-auto" :class="iconColor"/>
         <p class="text-nowrap mx-3 font-bold duration-300 ml-1 my-auto flex-grow" :class="textColor">{{ menu.name }}</p>
     </router-link>
