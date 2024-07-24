@@ -31,7 +31,7 @@ const showToggleBar = computed(() => props.toggled ? "opacity-100 w-2" : "opacit
 
 <template>
     <router-link :to="menu.routeTo" class="m-2 rounded-xl h-12 w-52 hover:cursor-pointer transition-all duration-300 select-none flex">
-        <div class="h-6 w-2 bg-gray-800 rounded-full ml-3 mr-1 my-auto transition-all duration-300" :class="showToggleBar"></div>
+        <div class="h-6 bg-gray-800 rounded-full ml-3 mr-1 my-auto transition-all duration-300" :class="showToggleBar"></div>
         <component :is="IconSvg" class="icon size-7 duration-300 mx-3 my-auto" :class="iconColor"/>
         <p class="text-nowrap mx-3 font-bold duration-300 ml-1 my-auto flex-grow" :class="textColor">{{ menu.name }}</p>
     </router-link>

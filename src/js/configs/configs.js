@@ -14,5 +14,9 @@ const menuConfigs = [
     ]),
 ];
 
+// Main menu colors
+const systemSettings = {
+};
 
-export { menuConfigs }
+
+export { menuConfigs, systemSettings }

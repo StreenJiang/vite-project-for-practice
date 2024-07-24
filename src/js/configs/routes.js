@@ -6,20 +6,24 @@ const routes = [
         component: () => import("../../components/views/DefaultView.vue"),
     },
     {
+        path: "/default",
+        component: () => import("../../components/views/DefaultView.vue"),
+    },
+    {
         path: "/workplace",
-        component: () => import("../../components/views/WorkplaceView.vue"),
+        component: () => import("../../components/views/workplace_views/WorkplaceView.vue"),
     },
     {
         path: "/mission_management",
-        component: () => import("../../components/views/MissionManagementView.vue"),
+        component: () => import("../../components/views/mission_management_views/MissionManagementView.vue"),
     },
     {
         path: "/event_log",
-        component: () => import("../../components/views/EventLogView.vue"),
+        component: () => import("../../components/views/event_log_views/EventLogView.vue"),
     },
     {
         path: "/data_query",
-        component: () => import("../../components/views/DataQueryView.vue"),
+        component: () => import("../../components/views/data_query_views/DataQueryView.vue"),
     },
     {
         path: "/variable_settings",
@@ -28,7 +32,7 @@ const routes = [
         children: [
             {
                 path: "account_management",
-                component: () => import("../../components/views/VariableSettingsView.vue"),
+                component: () => import("../../components/views/variable_settings_views/VariableSettingsView.vue"),
             }
         ],
     },

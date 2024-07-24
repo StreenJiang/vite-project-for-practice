@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, onUnmounted, defineEmits } from 'vue'
 import MainMenu from './MainMenu.vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
     menus: Array,
@@ -13,9 +14,12 @@ const hoverSlider = ref(null);
 const emit = defineEmits(["setCurrentMenu"]);
 
 onMounted(() => {
-    props.menus[0].toggled = true;
-    toggledId.value = props.menus[0].id;
-    emit("setCurrentMenu", props.menus[0]);
+    let curr = props.menus[0];
+
+    curr.toggled = true;
+    toggledId.value = curr.id;
+    useRouter().replace(curr.routeTo);
+    emit("setCurrentMenu", curr);
 
     window.addEventListener('resize', windowResized);  
 });
@@ -25,7 +29,7 @@ onUnmounted(() => {
 
 // ==================================================================================
 // Events
-function liClick(event, index) {
+function onClick(event, index) {
     currentTarget.value = event.currentTarget;
     // Set current menu into parent
     emit("setCurrentMenu", props.menus[index]);
@@ -46,20 +50,20 @@ function liClick(event, index) {
         toggledId.value = clickingOne.id;
     }
 }
-function liMouseEnter(event, index) {
+function onMouseEnter(event, index) {
     if (!props.menus[index].toggled) {
         removeActive();
         moveSlider(hoverSlider, event.currentTarget);
         showHoverSlider();
     }
 }
-const liMouseLeave = () => hideHoverSlider();
-const liMouseDown = (index) => {
+const onMouseLeave = () => hideHoverSlider();
+const onMouseDown = (index) => {
     if (!props.menus[index].toggled) {
         addActive();
     }
 };
-const liMouseUp = (index) => {
+const onMouseUp = (index) => {
     if (!props.menus[index].toggled) {
         removeActive();
     }
@@ -101,8 +105,8 @@ const toggled = (menuId) => toggledId.value === menuId;
   <nav class="bg-gray-800 w-auto relative z-0 flex flex-row flex-wrap">
       <MainMenu v-for="(menu, index) in menus" :key="menu.id" :toggled="toggled(menu.id)" :menu="menu" 
                 class="main-menu-size relative z-30"
-                @mouseenter="liMouseEnter($event, index)" @mouseleave="liMouseLeave" 
-                @mousedown="liMouseDown(index)" @mouseup="liMouseUp(index)" @click="liClick($event, index)"/>
+                @mouseenter="(event) => onMouseEnter(event, index)" @mouseleave="onMouseLeave" 
+                @mousedown="onMouseDown(index)" @mouseup="onMouseUp(index)" @click="onClick($event, index)"/>
       <div ref="slider" class="main-menu-size rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-20" style="left: 0px; top: 0px"></div>
       <div ref="hoverSlider" class="main-menu-size rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-10 opacity-0" style="left: 0px; top: 0px"></div>
   </nav>

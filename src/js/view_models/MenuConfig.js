@@ -1,5 +1,5 @@
 export default class MenuConfig {
-    constructor(id, name, icon, routeTo = "/", children = null) {
+    constructor(id, name, icon, routeTo = "/default", children = null) {
         this._id = id;
         this._name = name;
         this._icon = icon;

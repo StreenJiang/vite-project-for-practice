@@ -15,7 +15,7 @@ provide("currentMenu", currentMenu);
 <template>
   <div class="w-screen h-screen flex flex-col justify-between">
     <MainNav :menus="mainMenus" @setCurrentMenu="setCurrentMenu"/>
-    <MainContent />
+    <MainContent/>
     <MainFooter/>
   </div>
 </template>
