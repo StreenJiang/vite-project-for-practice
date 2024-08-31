@@ -12,6 +12,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isIconMode: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const IconSvg = shallowRef(null);
@@ -26,11 +30,12 @@ onMounted(() => {
 
 const iconColor = computed(() => props.toggled ? "fill-gray-800" : "fill-yellow-500");
 const textColor = computed(() => props.toggled ? "text-gray-800" : "text-yellow-500");
+const menuClass = computed(() => props.isIconMode ? 'h-12 w-12' : 'h-24 w-24');
 </script>
 
 <template>
-    <router-link :to="menu.routeTo" class="h-24 w-24 hover:cursor-pointer transition-all duration-300 select-none">
-        <component :is="IconSvg" class="icon size-9 duration-300 mx-auto mt-4" :class="iconColor"/>
-        <p class="pt-1 font-bold duration-300 text-center" :class="textColor">{{ menu.name }}</p>
+    <router-link :to="menu.routeTo" :class="[menuClass, 'hover:cursor-pointer transition-all duration-300 select-none flex flex-col items-center justify-center']">
+        <component :is="IconSvg" :class="['icon duration-300', iconColor, props.isIconMode ? 'size-6' : 'size-9']"/>
+        <p v-if="!isIconMode" class="pt-1 font-bold duration-300 text-center" :class="textColor">{{ menu.name }}</p>
     </router-link>
 </template>

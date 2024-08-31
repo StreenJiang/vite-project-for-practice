@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted, ref, onUnmounted, defineEmits } from 'vue'
+import { onMounted, ref, onUnmounted, defineEmits, computed, nextTick } from 'vue'
 import MainMenu from './MainMenu.vue'
 import { useRouter } from 'vue-router'
+import { Teleport } from 'vue'
 
 const props = defineProps({
     menus: Array,
@@ -12,6 +13,55 @@ const currentTarget = ref(null);
 const slider = ref(null);
 const hoverSlider = ref(null);
 const emit = defineEmits(["setCurrentMenu"]);
+const isIconMode = ref(false);
+const isTransitioning = ref(false);
+const hoveredMenu = ref(null);
+const mousePosition = ref({ x: 0, y: 0 });
+const showTooltip = ref(false);
+
+const menuClass = computed(() => isIconMode.value ? 'main-menu-size-icon-mode' : 'main-menu-size');
+
+// Remove this line as we no longer need different sizes
+// const switchButtonClass = computed(() => isIconMode.value ? 'w-6 h-6' : 'w-8 h-8');
+
+// Update this computed property for new icons
+const switchIcon = computed(() => isIconMode.value 
+    ? 'M4 6h4v4H4V6zm0 8h4v4H4v-4zm8-8h8v4h-8V6zm0 8h8v4h-8v-4z'  // Icon mode (switch to full mode)
+    : 'M4 6h16v4H4V6zm0 8h16v4H4v-4z'  // Full mode (switch to icon mode)
+);
+
+// Add this computed property for dynamic icon
+// const switchIcon = computed(() => isIconMode.value 
+//     ? 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8' 
+//     : 'M12 5l9 2-9-18-9 18 9-2zm0 0v8'
+// );
+
+function toggleIconMode() {
+    isTransitioning.value = true;
+    
+    // Fade out
+    setTimeout(() => {
+        isIconMode.value = !isIconMode.value;
+        
+        // Wait for the fade-out transition to complete
+        setTimeout(() => {
+            // Recalculate positions
+            moveSlider(slider, currentTarget.value);
+            moveSlider(hoverSlider, currentTarget.value);
+            
+            // Fade in
+            nextTick(() => {
+                isTransitioning.value = false;
+            });
+        }, 300); // Changed back to 300ms
+    }, 200);
+}
+
+// Modify windowResized function
+const windowResized = () => {
+    moveSlider(slider, currentTarget.value);
+    moveSlider(hoverSlider, currentTarget.value);
+};
 
 onMounted(() => {
     let curr = props.menus[0];
@@ -56,8 +106,28 @@ function onMouseEnter(event, index) {
         moveSlider(hoverSlider, event.currentTarget);
         showHoverSlider();
     }
+    hoveredMenu.value = props.menus[index];
+    updateMousePosition(event);
+    showTooltip.value = true;
 }
-const onMouseLeave = () => hideHoverSlider();
+function onMouseMove(event) {
+    updateMousePosition(event);
+}
+function updateMousePosition(event) {
+    mousePosition.value = {
+        x: event.clientX,
+        y: event.clientY
+    };
+}
+const onMouseLeave = () => {
+    hideHoverSlider();
+    showTooltip.value = false;
+    setTimeout(() => {
+        if (!showTooltip.value) {
+            hoveredMenu.value = null;
+        }
+    }, 300); // Match this with the transition duration
+};
 const onMouseDown = (index) => {
     if (!props.menus[index].toggled) {
         addActive();
@@ -68,7 +138,6 @@ const onMouseUp = (index) => {
         removeActive();
     }
 };
-const windowResized = () => moveSlider(slider, currentTarget.value);
 // ==================================================================================
 
 // ==================================================================================
@@ -99,16 +168,46 @@ const removeActive = () => {
 };
 const toggled = (menuId) => toggledId.value === menuId;
 // ==================================================================================
+
+// Update this computed property for even less spaced text
+const spacedMenuName = computed(() => {
+    return hoveredMenu.value ? hoveredMenu.value.name.split('').join('\u200A') : '';
+});
 </script>
 
 <template>
   <nav class="bg-gray-800 w-auto relative z-0 flex flex-row flex-wrap">
-      <MainMenu v-for="(menu, index) in menus" :key="menu.id" :toggled="toggled(menu.id)" :menu="menu" 
-                class="main-menu-size relative z-30"
-                @mouseenter="(event) => onMouseEnter(event, index)" @mouseleave="onMouseLeave" 
-                @mousedown="onMouseDown(index)" @mouseup="onMouseUp(index)" @click="onClick($event, index)"/>
-      <div ref="slider" class="main-menu-size rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-20" style="left: 0px; top: 0px"></div>
-      <div ref="hoverSlider" class="main-menu-size rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-10 opacity-0" style="left: 0px; top: 0px"></div>
+      <MainMenu v-for="(menu, index) in menus" :key="menu.id" 
+                :toggled="toggled(menu.id)" 
+                :menu="menu" 
+                :isIconMode="isIconMode"
+                :class="[menuClass, 'relative z-30 transition-all duration-300', { 'opacity-0': isTransitioning }]"
+                @mouseenter="(event) => onMouseEnter(event, index)" 
+                @mouseleave="onMouseLeave" 
+                @mousemove="onMouseMove"
+                @mousedown="onMouseDown(index)" 
+                @mouseup="onMouseUp(index)" 
+                @click="onClick($event, index)"/>
+      
+      <!-- Move the tooltip outside of the nav component using Teleport -->
+      <Teleport to="body">
+        <Transition name="fade">
+          <div v-if="hoveredMenu && isIconMode && showTooltip" 
+               class="fixed z-[9999] bg-gray-700 text-white px-2 py-1 rounded-md text-sm whitespace-nowrap pointer-events-none shadow-lg tracking-normal"
+               :style="{ left: `${mousePosition.x + 10}px`, top: `${mousePosition.y + 10}px` }">
+            {{ spacedMenuName }}
+          </div>
+        </Transition>
+      </Teleport>
+      
+      <div ref="slider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-20', { 'opacity-0': isTransitioning }]" style="left: 0px; top: 0px"></div>
+      <div ref="hoverSlider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-10 opacity-0', { 'opacity-0': isTransitioning }]" style="left: 0px; top: 0px"></div>
+      <button @click="toggleIconMode" 
+              class="w-8 h-8 absolute bottom-3 right-3 text-yellow-500 rounded-xl hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-[21.6px] h-[21.6px] transition-all duration-300" viewBox="0 0 24 24" fill="currentColor">
+              <path :d="switchIcon" />
+          </svg>
+      </button>
   </nav>
 </template>
 
@@ -118,6 +217,22 @@ const toggled = (menuId) => toggledId.value === menuId;
 }
 
 .main-menu-size-icon-mode {
-    @apply w-16 h-16 m-3;
+    @apply w-12 h-12 m-2;
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Remove this as it's no longer needed */
+/* :root {
+  --tooltip-z-index: 9999;
+} */
 </style>
