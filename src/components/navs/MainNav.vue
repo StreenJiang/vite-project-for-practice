@@ -116,4 +116,8 @@ const toggled = (menuId) => toggledId.value === menuId;
 .main-menu-size {
     @apply w-24 h-24 m-3;
 }
+
+.main-menu-size-icon-mode {
+    @apply w-16 h-16 m-3;
+}
 </style>
