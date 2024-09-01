@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted, ref, onUnmounted, defineEmits, computed, nextTick } from 'vue'
+import { onMounted, ref, onUnmounted, defineEmits, computed, nextTick, watch } from 'vue'
 import MainMenu from './MainMenu.vue'
 import { useRouter } from 'vue-router'
 import Tooltip from '../reusable_components/Tooltip.vue'
+import { useDebounce } from '@vueuse/core'
 
 const props = defineProps({
     menus: Array,
@@ -18,23 +19,15 @@ const isTransitioning = ref(false);
 const hoveredMenu = ref(null);
 const mousePosition = ref({ x: 0, y: 0 });
 const showTooltip = ref(false);
+const tooltipTimer = ref(null);
 
 const menuClass = computed(() => isIconMode.value ? 'main-menu-size-icon-mode' : 'main-menu-size');
-
-// Remove this line as we no longer need different sizes
-// const switchButtonClass = computed(() => isIconMode.value ? 'w-6 h-6' : 'w-8 h-8');
 
 // Update this computed property for new icons
 const switchIcon = computed(() => isIconMode.value 
     ? 'M4 6h4v4H4V6zm0 8h4v4H4v-4zm8-8h8v4h-8V6zm0 8h8v4h-8v-4z'  // Icon mode (switch to full mode)
     : 'M4 6h16v4H4V6zm0 8h16v4H4v-4z'  // Full mode (switch to icon mode)
 );
-
-// Add this computed property for dynamic icon
-// const switchIcon = computed(() => isIconMode.value 
-//     ? 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8' 
-//     : 'M12 5l9 2-9-18-9 18 9-2zm0 0v8'
-// );
 
 function toggleIconMode() {
     isTransitioning.value = true;
@@ -108,7 +101,6 @@ function onMouseEnter(event, index) {
     }
     hoveredMenu.value = props.menus[index];
     updateMousePosition(event);
-    showTooltip.value = true;
 }
 function onMouseMove(event) {
     updateMousePosition(event);
@@ -118,15 +110,17 @@ function updateMousePosition(event) {
         x: event.clientX,
         y: event.clientY
     };
+    showTooltip.value = true;
+    clearTimeout(tooltipTimer.value);
+    tooltipTimer.value = setTimeout(() => {
+        showTooltip.value = false;
+    }, 1500);
 }
 const onMouseLeave = () => {
     hideHoverSlider();
     showTooltip.value = false;
-    setTimeout(() => {
-        if (!showTooltip.value) {
-            hoveredMenu.value = null;
-        }
-    }, 300); // Match this with the transition duration
+    clearTimeout(tooltipTimer.value);
+    hoveredMenu.value = null;
 };
 const onMouseDown = (index) => {
     if (!props.menus[index].toggled) {
@@ -168,6 +162,14 @@ const removeActive = () => {
 };
 const toggled = (menuId) => toggledId.value === menuId;
 // ==================================================================================
+
+// Add watch effect for debouncedMousePosition
+const debouncedMousePosition = useDebounce(mousePosition, 1000);
+watch(debouncedMousePosition, () => {
+    if (hoveredMenu.value) {
+        showTooltip.value = false;
+    }
+});
 </script>
 
 <template>
