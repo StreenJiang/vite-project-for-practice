@@ -2,7 +2,7 @@
 import { onMounted, ref, onUnmounted, defineEmits, computed, nextTick } from 'vue'
 import MainMenu from './MainMenu.vue'
 import { useRouter } from 'vue-router'
-import { Teleport } from 'vue'
+import Tooltip from '../reusable_components/Tooltip.vue'
 
 const props = defineProps({
     menus: Array,
@@ -39,7 +39,7 @@ const switchIcon = computed(() => isIconMode.value
 function toggleIconMode() {
     isTransitioning.value = true;
     
-    // Fade out
+    // Fade out: set 200ms delay to wait for the icon and text to disappear
     setTimeout(() => {
         isIconMode.value = !isIconMode.value;
         
@@ -53,7 +53,7 @@ function toggleIconMode() {
             nextTick(() => {
                 isTransitioning.value = false;
             });
-        }, 300); // Changed back to 300ms
+        }, 300);
     }, 200);
 }
 
@@ -168,11 +168,6 @@ const removeActive = () => {
 };
 const toggled = (menuId) => toggledId.value === menuId;
 // ==================================================================================
-
-// Update this computed property for even less spaced text
-const spacedMenuName = computed(() => {
-    return hoveredMenu.value ? hoveredMenu.value.name.split('').join('\u200A') : '';
-});
 </script>
 
 <template>
@@ -189,16 +184,12 @@ const spacedMenuName = computed(() => {
                 @mouseup="onMouseUp(index)" 
                 @click="onClick($event, index)"/>
       
-      <!-- Move the tooltip outside of the nav component using Teleport -->
-      <Teleport to="body">
-        <Transition name="fade">
-          <div v-if="hoveredMenu && isIconMode && showTooltip" 
-               class="fixed z-[9999] bg-gray-700 text-white px-2 py-1 rounded-md text-sm whitespace-nowrap pointer-events-none shadow-lg tracking-normal"
-               :style="{ left: `${mousePosition.x + 10}px`, top: `${mousePosition.y + 10}px` }">
-            {{ spacedMenuName }}
-          </div>
-        </Transition>
-      </Teleport>
+      <Tooltip 
+        :text="hoveredMenu ? hoveredMenu.name : ''"
+        :show="hoveredMenu && isIconMode && showTooltip"
+        :position="mousePosition"
+        :spaced="true"
+      />
       
       <div ref="slider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-20', { 'opacity-0': isTransitioning }]" style="left: 0px; top: 0px"></div>
       <div ref="hoverSlider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-10 opacity-0', { 'opacity-0': isTransitioning }]" style="left: 0px; top: 0px"></div>
@@ -220,19 +211,5 @@ const spacedMenuName = computed(() => {
     @apply w-12 h-12 m-2;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* Remove this as it's no longer needed */
-/* :root {
-  --tooltip-z-index: 9999;
-} */
+/* Remove the fade transition styles as they're now in the Tooltip component */
 </style>
