@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, onUnmounted } from 'vue'
+import { onMounted, ref, onUnmounted, nextTick } from 'vue'
 import SubMenu from './SubMenu.vue'
 import { useRouter } from 'vue-router'
 
@@ -11,6 +11,9 @@ const toggledId = ref(false);
 const currentTarget = ref(null);
 const slider = ref(null);
 const hoverSlider = ref(null);
+const subMenuRefs = ref([]);
+const navRef = ref(null);
+const resizeObserver = ref(null);
 
 onMounted(() => {
     let curr = props.menus[0];
@@ -19,10 +22,17 @@ onMounted(() => {
     toggledId.value = curr.id;
     useRouter().replace(curr.routeTo);
 
+    nextTick(() => {
+        setupResizeObserver();
+    });
+
     window.addEventListener('resize', windowResized);  
 });
 onUnmounted(() => {  
-  window.removeEventListener('resize', windowResized);  
+    window.removeEventListener('resize', windowResized);
+    if (resizeObserver.value) {
+        resizeObserver.value.disconnect();
+    }
 });  
 
 // ==================================================================================
@@ -63,7 +73,11 @@ const onMouseUp = (index) => {
         removeActive();
     }
 };
-const windowResized = () => moveSlider(slider, currentTarget.value);
+const windowResized = () => {
+    moveSlider(slider, currentTarget.value);
+    updateNavWidth();
+};
+
 // ==================================================================================
 
 // ==================================================================================
@@ -94,14 +108,53 @@ const removeActive = () => {
 };
 const toggled = (menuId) => toggledId.value === menuId;
 // ==================================================================================
+function setupResizeObserver() {
+    resizeObserver.value = new ResizeObserver((entries) => {
+        // Use requestAnimationFrame to limit the frequency of updates
+        requestAnimationFrame(() => {
+            updateNavWidth();
+        });
+    });
+
+    // Observe each SubMenu component
+    subMenuRefs.value.forEach(el => {
+        resizeObserver.value.observe(el.$el);
+    });
+
+    // Also observe the nav element itself
+    resizeObserver.value.observe(navRef.value);
+}
+
+function updateNavWidth() {
+    if (subMenuRefs.value.length > 0) {
+        const maxWidth = Math.max(...subMenuRefs.value.map(el => el.$el.scrollWidth));
+        
+        const totalWidth = maxWidth + 24; // 24px for margins
+        navRef.value.style.width = `${totalWidth}px`;
+        slider.value.style.width = `${totalWidth - 24}px`; // Subtract margins
+        hoverSlider.value.style.width = `${totalWidth - 24}px`; // Subtract margins
+        
+        // Set min-width for sub-menus to prevent text overflow
+        subMenuRefs.value.forEach(el => {
+            el.$el.style.minWidth = `${totalWidth - 24}px`; // Subtract margins
+        });
+    }
+}
 </script>
 
 <template>
-  <nav class="border-gray-500 border-r bg-gray-700 w-min h-full relative z-0 flex flex-col">
-      <SubMenu v-for="(menu, index) in menus" :key="menu.id" :toggled="toggled(menu.id)" :menu="menu" 
-                class="sub-menu-size relative z-30"
-                @mouseenter="onMouseEnter($event, index)" @mouseleave="onMouseLeave" 
-                @mousedown="onMouseDown(index)" @mouseup="onMouseUp(index)" @click="liClick($event, index)"/>
+  <nav ref="navRef" class="border-gray-500 border-r bg-gray-700 h-full relative z-0 flex flex-col">
+      <SubMenu v-for="(menu, index) in menus" 
+               :key="menu.id" 
+               :toggled="toggled(menu.id)" 
+               :menu="menu" 
+               class="sub-menu-size relative z-30"
+               @mouseenter="onMouseEnter($event, index)" 
+               @mouseleave="onMouseLeave" 
+               @mousedown="onMouseDown(index)" 
+               @mouseup="onMouseUp(index)" 
+               @click="liClick($event, index)"
+               ref="subMenuRefs"/>
       <div ref="slider" class="sub-menu-size rounded-xl bg-gray-400 transition-all ease-out duration-300 absolute z-20" style="left: 0px; top: 0px"></div>
       <div ref="hoverSlider" class="sub-menu-size rounded-xl bg-gray-400 transition-all ease-out duration-300 absolute z-10 opacity-0" style="left: 0px; top: 0px"></div>
   </nav>

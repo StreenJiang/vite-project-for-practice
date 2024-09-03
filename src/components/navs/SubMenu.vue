@@ -6,7 +6,7 @@ import { isStringEmpty } from '../../js/utils/utils';
 const props = defineProps({
     menu: {
         type: MenuConfig,
-        default: new MenuConfig(0, "子菜单名字很长", "", false),
+        default: new MenuConfig(0, "XXXXXX", "", false),
     },
     toggled: {
         type: Boolean,
