@@ -21,7 +21,7 @@ onMounted(() => {
         iconPath = `../icon_svgs/${props.menu.icon}`;
     }
 
-    IconSvg.value = defineAsyncComponent(() => import(iconPath));
+    IconSvg.value = defineAsyncComponent(() => import(/* @vite-ignore */ iconPath));
 });
 
 const iconColor = computed(() => props.toggled ? "fill-gray-800" : "fill-gray-400");

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, onUnmounted, defineEmits, computed, nextTick, watch } from 'vue'
+import { onMounted, ref, onUnmounted, computed, nextTick, watch } from 'vue'
 import MainMenu from './MainMenu.vue'
 import { useRouter } from 'vue-router'
 import Tooltip from '../reusable_components/Tooltip.vue'
