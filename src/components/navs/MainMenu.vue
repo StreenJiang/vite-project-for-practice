@@ -6,7 +6,7 @@ import { isStringEmpty } from '../../js/utils/utils';
 const props = defineProps({
     menu: {
         type: MenuConfig,
-        default: new MenuConfig(0, "MainMenuName", "", false),
+        default: new MenuConfig(0, "MainMenuName", ""),
     },
     toggled: {
         type: Boolean,
@@ -20,10 +20,9 @@ const props = defineProps({
 
 const IconSvg = shallowRef(null);
 onMounted(() => {
-    let iconPath = "../icon_svgs/DefaultSvg.vue";
-    if (!isStringEmpty(props.menu.icon)) {
-        iconPath = `../icon_svgs/${props.menu.icon}`;
-    }
+    let iconPath = isStringEmpty(props.menu.icon) ?
+                "../icon_svgs/DefaultSvg.vue" : 
+                `../icon_svgs/${props.menu.icon}`;
 
     IconSvg.value = defineAsyncComponent(() => import(/* @vite-ignore */ iconPath));
 });

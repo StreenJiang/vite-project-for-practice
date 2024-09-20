@@ -2,7 +2,7 @@
 import { onMounted, ref, onUnmounted, computed, nextTick, watch } from 'vue'
 import MainMenu from './MainMenu.vue'
 import { useRouter } from 'vue-router'
-import Tooltip from '../reusable_components/Tooltip.vue'
+import Tooltip from '../reusables/Tooltip.vue'
 import { useDebounce } from '@vueuse/core'
 
 const props = defineProps({
@@ -138,9 +138,9 @@ const onMouseUp = (index) => {
 // Reuseable methods
 function moveSlider(_slider, target) {
     if (target != null) {
-        const style = window.getComputedStyle(_slider.value);
-        _slider.value.style.left = `${target.offsetLeft - parseInt(style.marginLeft, 10)}px`;
-        _slider.value.style.top = `${target.offsetTop - parseInt(style.marginTop, 10)}px`;
+        _slider.value.style.marginLeft = `0px`;
+        _slider.value.style.marginTop = `0px`;
+        _slider.value.style.transform = `translate(${target.offsetLeft}px, ${target.offsetTop}px)`;
     }
 }
 function showHoverSlider() {
@@ -193,8 +193,8 @@ watch(debouncedMousePosition, () => {
         :spaced="true"
       />
       
-      <div ref="slider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-20', { 'opacity-0': isTransitioning }]" style="left: 0px; top: 0px"></div>
-      <div ref="hoverSlider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-10 opacity-0', { 'opacity-0': isTransitioning }]" style="left: 0px; top: 0px"></div>
+      <div ref="slider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-20', { 'opacity-0': isTransitioning }]"></div>
+      <div ref="hoverSlider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-10 opacity-0', { 'opacity-0': isTransitioning }]"></div>
       <button @click="toggleIconMode" 
               class="w-8 h-8 absolute bottom-3 right-3 text-yellow-500 rounded-xl hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-[21.6px] h-[21.6px] transition-all duration-300" viewBox="0 0 24 24" fill="currentColor">

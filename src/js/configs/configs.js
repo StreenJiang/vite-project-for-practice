@@ -14,7 +14,7 @@ const menuConfigs = [
     ]),
 ];
 
-// Main menu colors
+// System settings
 const systemSettings = {
 };
 

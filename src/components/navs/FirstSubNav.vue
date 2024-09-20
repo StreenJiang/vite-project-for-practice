@@ -2,6 +2,7 @@
 import { onMounted, ref, onUnmounted, nextTick } from 'vue'
 import SubMenu from './SubMenu.vue'
 import { useRouter } from 'vue-router'
+import { debounce } from 'lodash'; // Add this import at the top of your file
 
 const props = defineProps({
     menus: Array,
@@ -84,9 +85,9 @@ const windowResized = () => {
 // Reuseable methods
 function moveSlider(_slider, target) {
     if (target != null) {
-        const style = window.getComputedStyle(_slider.value);
-        _slider.value.style.left = `${target.offsetLeft - parseInt(style.marginLeft, 10)}px`;
-        _slider.value.style.top = `${target.offsetTop - parseInt(style.marginTop, 10)}px`;
+        _slider.value.style.marginLeft = `0px`;
+        _slider.value.style.marginTop = `0px`;
+        _slider.value.style.transform = `translate(${target.offsetLeft}px, ${target.offsetTop}px)`;
     }
 }
 function showHoverSlider() {
@@ -125,7 +126,7 @@ function setupResizeObserver() {
     resizeObserver.value.observe(navRef.value);
 }
 
-function updateNavWidth() {
+const debouncedUpdateNavWidth = debounce(() => {
     if (subMenuRefs.value.length > 0) {
         const maxWidth = Math.max(...subMenuRefs.value.map(el => el.$el.scrollWidth));
         
@@ -139,6 +140,10 @@ function updateNavWidth() {
             el.$el.style.minWidth = `${totalWidth - 24}px`; // Subtract margins
         });
     }
+}, 200);
+
+function updateNavWidth() {
+    debouncedUpdateNavWidth();
 }
 </script>
 
@@ -155,8 +160,8 @@ function updateNavWidth() {
                @mouseup="onMouseUp(index)" 
                @click="liClick($event, index)"
                ref="subMenuRefs"/>
-      <div ref="slider" class="sub-menu-size rounded-xl bg-gray-400 transition-all ease-out duration-300 absolute z-20" style="left: 0px; top: 0px"></div>
-      <div ref="hoverSlider" class="sub-menu-size rounded-xl bg-gray-400 transition-all ease-out duration-300 absolute z-10 opacity-0" style="left: 0px; top: 0px"></div>
+      <div ref="slider" class="sub-menu-size rounded-xl bg-gray-400 transition-all ease-out duration-300 absolute z-20"></div>
+      <div ref="hoverSlider" class="sub-menu-size rounded-xl bg-gray-400 transition-all ease-out duration-300 absolute z-10 opacity-0"></div>
   </nav>
 </template>
 
