@@ -28,6 +28,14 @@ const switchIcon = computed(() => isIconMode.value
     ? 'M4 6h4v4H4V6zm0 8h4v4H4v-4zm8-8h8v4h-8V6zm0 8h8v4h-8v-4z'  // Icon mode (switch to full mode)
     : 'M4 6h16v4H4V6zm0 8h16v4H4v-4z'  // Full mode (switch to icon mode)
 );
+const switchButtonSize = computed(() => isIconMode.value
+    ? "w-6 h-6 absolute bottom-2 right-2"
+    : "w-8 h-8 absolute bottom-3 right-3"
+);
+const switchIconSize = computed(() => isIconMode.value
+    ? "w-8 h-8 transition-all duration-300"
+    : "w-10 h-10 transition-all duration-300"
+);
 
 function toggleIconMode() {
     isTransitioning.value = true;
@@ -170,6 +178,19 @@ watch(debouncedMousePosition, () => {
         showTooltip.value = false;
     }
 });
+
+// Add this function to handle full-screen toggle
+function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        isFullScreen.value = true;
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+            isFullScreen.value = false;
+        }
+    }
+}
 </script>
 
 <template>
@@ -195,9 +216,11 @@ watch(debouncedMousePosition, () => {
       
       <div ref="slider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-20', { 'opacity-0': isTransitioning }]"></div>
       <div ref="hoverSlider" :class="[menuClass, 'rounded-xl bg-yellow-500 transition-all ease-out duration-300 absolute z-10 opacity-0', { 'opacity-0': isTransitioning }]"></div>
+      
       <button @click="toggleIconMode" 
-              class="w-8 h-8 absolute bottom-3 right-3 text-yellow-500 rounded-xl hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-[21.6px] h-[21.6px] transition-all duration-300" viewBox="0 0 24 24" fill="currentColor">
+              :class="switchButtonSize"
+              class="text-yellow-500 rounded-md hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" :class="switchIconSize" viewBox="0 0 24 24" fill="currentColor">
               <path :d="switchIcon" />
           </svg>
       </button>
@@ -212,6 +235,4 @@ watch(debouncedMousePosition, () => {
 .main-menu-size-icon-mode {
     @apply w-12 h-12 m-2;
 }
-
-/* Remove the fade transition styles as they're now in the Tooltip component */
 </style>
