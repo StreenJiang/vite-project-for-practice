@@ -10,8 +10,10 @@
     "build:css": "postcss src/assets/style.css -o dist/css/style.css"
   },
   "dependencies": {
+    "@primevue/themes": "^4.1.0",
     "@vueuse/core": "^11.0.3",
     "lodash": "^4.17.21",
+    "primevue": "^4.1.0",
     "vue": "^3.4.29",
     "vue-router": "^4.4.0"
   },
