@@ -29,8 +29,8 @@ const switchIcon = computed(() => isIconMode.value
     : 'M4 6h16v4H4V6zm0 8h16v4H4v-4z'  // Full mode (switch to icon mode)
 );
 const switchButtonSize = computed(() => isIconMode.value
-    ? "absolute sxga:w-6 sxga:h-6 sxga:bottom-2 sxga:right-2 xga:w-5 xga:h-5 xga:bottom-1 xga:right-1"
-    : "absolute sxga:w-7 sxga:h-7 sxga:bottom-3 sxga:right-3 xga:w-6 xga:h-6 xga:bottom-2 xga:right-2"
+    ? "absolute sxga:w-6 sxga:h-6 sxga:bottom-2 sxga:right-2 sm:w-5 sm:h-5 sm:bottom-1 sm:right-1"
+    : "absolute sxga:w-7 sxga:h-7 sxga:bottom-3 sxga:right-3 sm:w-6 sm:h-6 sm:bottom-2 sm:right-2"
 );
 
 function toggleIconMode() {
@@ -215,7 +215,7 @@ function toggleFullScreen() {
       
       <button @click="toggleIconMode" 
               :class="switchButtonSize"
-              class="text-yellow-500 sxga:rounded-md xga:rounded hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out flex items-center justify-center">
+              class="text-yellow-500 sxga:rounded-md sm:rounded hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="transition-all duration-300" viewBox="0 0 24 24" fill="currentColor">
               <path :d="switchIcon" />
           </svg>
@@ -225,10 +225,10 @@ function toggleFullScreen() {
 
 <style scoped>
 .main-menu-size {
-    @apply sxga:w-24 sxga:h-24 sxga:m-3 xga:w-20 xga:h-20 xga:m-2.5;
+    @apply sxga:w-24 sxga:h-24 sxga:m-3 sm:w-20 sm:h-20 sm:m-2.5;
 }
 
 .main-menu-size-icon-mode {
-    @apply sxga:w-12 sxga:h-12 sxga:m-2 xga:w-10 xga:h-10 xga:m-1.5;
+    @apply sxga:w-12 sxga:h-12 sxga:m-2 sm:w-10 sm:h-10 sm:m-1.5;
 }
 </style>

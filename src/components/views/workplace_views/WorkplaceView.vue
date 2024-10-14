@@ -53,18 +53,18 @@ const search = (event) => {
     <div class="flex flex-col">
         <Toolbar class="toolbar">
             <template #start>
-                <FloatLabel class="xga:w-52 sxga:w-60 hdp:w-64 fhd:w-72" variant="on">
+                <FloatLabel class="sm:w-52 sxga:w-60 hdp:w-64 fhd:w-72" variant="on">
                     <AutoComplete v-model="missionName" dropdown inputId="on_label" :suggestions="items" @complete="search" class="autocomplete w-full" />
                     <label for="on_label">任务名称</label>
                 </FloatLabel>
-                <FloatLabel class="xga:w-32 sxga:w-36 hdp:w-40 fhd:w-48 sxga:ml-3 xga:ml-2" variant="on">
+                <FloatLabel class="sm:w-32 sxga:w-36 hdp:w-40 fhd:w-48 sxga:ml-3 sm:ml-2" variant="on">
                     <Select v-model="sideName" inputId="on_label" :options="sides" optionLabel="name" class="select w-full" />
                     <label for="on_label">产品面</label>
                 </FloatLabel>
             </template>
 
             <template #end>
-                <FloatLabel class="xga:w-44 sxga:w-48 hdp:w-52 fhd:w-56" variant="on">
+                <FloatLabel class="sm:w-44 sxga:w-48 hdp:w-52 fhd:w-56" variant="on">
                     <Select v-model="missionMode" inputId="on_label" :options="missionModes" optionLabel="name" class="select w-full" />
                     <label for="on_label">任务模式</label>
                 </FloatLabel>
@@ -81,12 +81,12 @@ const search = (event) => {
 
 <style scoped>
 .toolbar {
-    @apply bg-gray-400 border-none rounded-none sxga:p-3 sxga:pt-4 xga:p-2 xga:pt-3;
+    @apply bg-gray-400 border-none rounded-none sxga:p-3 sxga:pt-4 sm:p-2 sm:pt-3;
 }
 .autocomplete, .select {
-    @apply bg-gray-400 sxga:h-10 sxga:text-base xga:h-9 xga:text-sm;
+    @apply bg-gray-400 sxga:h-10 sxga:text-base sm:h-9 sm:text-sm;
 }
 button {
-    @apply font-black sxga:ml-3 sxga:h-10 sxga:text-sm xga:ml-2 xga:h-9 xga:text-sm;
+    @apply font-black sxga:ml-3 sxga:h-10 sxga:text-sm sm:ml-2 sm:h-9 sm:text-sm;
 }
 </style>

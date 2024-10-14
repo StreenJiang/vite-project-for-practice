@@ -10,7 +10,7 @@ const productBarCode = ref(null);
 </script>
 
 <template>
-    <IconField class="sxga:h-14 xga:h-10">
+    <IconField class="sxga:h-14 sm:h-10">
         <InputIcon>
             <ScanBarCodeSvg class="size-4 fill-gray-900" />
         </InputIcon>
