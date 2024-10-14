@@ -25,13 +25,13 @@ onMounted(() => {
 
 const iconColor = computed(() => props.toggled ? "fill-gray-800" : "fill-gray-400");
 const textColor = computed(() => props.toggled ? "text-gray-800" : "text-gray-400");
-const showToggleBar = computed(() => props.toggled ? "opacity-100 w-2" : "opacity-0 w-0");
+const showToggleBar = computed(() => props.toggled ? "opacity-100 sxga:w-2 xga:w-1.5" : "opacity-0 w-0");
 </script>
 
 <template>
     <router-link :to="menu.routeTo" class="m-2 rounded-xl h-12 w-52 hover:cursor-pointer transition-all duration-300 select-none flex">
-        <div class="h-6 bg-gray-800 rounded-full ml-3 mr-1 my-auto transition-all duration-300" :class="showToggleBar"></div>
-        <component :is="IconSvg" class="icon size-7 duration-300 mx-3 my-auto" :class="iconColor"/>
-        <p class="text-nowrap mx-3 font-bold duration-300 ml-1 my-auto flex-grow" :class="textColor">{{ menu.name }}</p>
+        <div class="sxga:h-6 xga:h-4 bg-gray-800 rounded-full sxga:ml-3 sxga:mr-1 xga:ml-2.5 xga:mr-0.5 my-auto transition-all duration-300" :class="showToggleBar"></div>
+        <component :is="IconSvg" class="icon duration-300 my-auto sxga:size-7 sxga:mx-3 xga:size-5 xga:mx-2" :class="iconColor"/>
+        <p class="text-nowrap font-bold duration-300 my-auto flex-grow sxga:mx-3 sxga:ml-1 sxga:text-base xga:mx-2.5 xga:ml-0.5 xga:text-sm" :class="textColor">{{ menu.name }}</p>
     </router-link>
 </template>

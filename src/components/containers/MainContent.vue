@@ -12,7 +12,7 @@ const hasSubMenu = computed(() => {
   <div class="bg-gray-600 w-full h-full flex">
     <FirstSubNav v-if="hasSubMenu" :menus="currentMenu.children"/>
     <div class="w-full h-full">
-      <router-view/>
+      <router-view class="w-full h-full" />
     </div>
   </div>
 </template>

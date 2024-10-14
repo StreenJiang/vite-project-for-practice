@@ -167,6 +167,6 @@ function updateNavWidth() {
 
 <style scoped>
 .sub-menu-size {
-    @apply min-w-48 w-min h-12 m-3;
+    @apply w-min sxga:min-w-48 sxga:h-12 sxga:m-3 xga:min-w-40 xga:h-10 xga:m-2;
 }
 </style>

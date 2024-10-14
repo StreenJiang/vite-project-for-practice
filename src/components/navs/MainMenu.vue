@@ -29,12 +29,12 @@ onMounted(() => {
 
 const iconColor = computed(() => props.toggled ? "fill-gray-800" : "fill-yellow-500");
 const textColor = computed(() => props.toggled ? "text-gray-800" : "text-yellow-500");
-const menuClass = computed(() => props.isIconMode ? 'h-12 w-12' : 'h-24 w-24');
+const menuClass = computed(() => props.isIconMode ? 'sxga:h-12 sxga:w-12 xga:h-8 xga:w-8' : 'sxga:h-24 sxga:w-24 xga:h-20 xga:w-20');
 </script>
 
 <template>
     <router-link :to="menu.routeTo" :class="[menuClass, 'hover:cursor-pointer transition-all duration-300 select-none flex flex-col items-center justify-center']">
-        <component :is="IconSvg" :class="['icon duration-300', iconColor, props.isIconMode ? 'size-6' : 'size-9']"/>
-        <p v-if="!isIconMode" class="pt-1 font-bold duration-300 text-center" :class="textColor">{{ menu.name }}</p>
+        <component :is="IconSvg" :class="['icon duration-300', iconColor, props.isIconMode ? 'sxga:size-6 xga:size-5' : 'sxga:size-9 xga:size-7']"/>
+        <p v-if="!isIconMode" class="pt-1 font-bold duration-300 text-center sxga:text-base xga:text-sm" :class="textColor">{{ menu.name }}</p>
     </router-link>
 </template>
