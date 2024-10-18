@@ -10,9 +10,26 @@ const hasSubMenu = computed(() => {
 
 <template>
   <div class="bg-gray-600 w-full h-full flex">
-    <FirstSubNav v-if="hasSubMenu" :menus="currentMenu.children"/>
-    <div class="w-full h-full">
-      <router-view class="w-full h-full" />
-    </div>
+    <transition mode="out-in">
+      <FirstSubNav v-if="hasSubMenu" :menus="currentMenu.children"/>
+    </transition>
+
+    <RouterView v-slot="{ Component }">
+      <transition mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </RouterView>
   </div>
 </template>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: all .15s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

@@ -15,9 +15,9 @@ app.whenReady().then(async () => {
     })
 
     win.menuBarVisible = false;
-    win.maximizable = false;
-    win.fullScreenable = false;
-    win.resizable = false;
+    // win.maximizable = false;
+    // win.fullScreenable = false;
+    // win.resizable = false;
 
     // 根据命令行参数加载URL或本地文件
     if (process.argv[2]) {

@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import '../assets/style.css'
 import App from '../App.vue'
 import router from './configs/routes.js'
+import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
 import { definePreset } from '@primevue/themes'
 import Theme from '@primevue/themes/aura'
@@ -35,6 +36,10 @@ const MyPreset = definePreset(Theme, {
 
 
 const app = createApp(App);
+const pinia = createPinia();
+
+app.use(router);
+app.use(pinia);
 app.use(PrimeVue, {
     theme: {
         preset: MyPreset,
@@ -44,5 +49,4 @@ app.use(PrimeVue, {
         },
     }
 });
-app.use(router);
 app.mount('#app')

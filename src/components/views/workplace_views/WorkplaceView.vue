@@ -1,52 +1,62 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Toolbar from 'primevue/toolbar';
 import Button from 'primevue/button';
 import AutoComplete from 'primevue/autocomplete';
 import Select from 'primevue/select';
 import FloatLabel from 'primevue/floatlabel';
 import Layout1 from './layouts/Layout1.vue';
+import { isStringEmpty } from "../../../js/utils/utils";
+import { useWorkplaceProductStore } from "../../../stores/workplaceProduct";
 
-const missionName = ref(null);
-const sideName = ref(null);
-const missionMode = ref(null);
-const items = ref([]);
+const workplaceProductStore = useWorkplaceProductStore();
+const productMissionObj = ref(null);
+const productSideObj = ref(null);
+const missionModeObj = ref(null);
+
+const products = ref([
+    { id: 1, name: "测试任务1号" },
+    { id: 2, name: "测试任务2号" },
+    { id: 3, name: "测试任务3号" },
+    { id: 4, name: "测试任务4号" },
+]);
+const items = ref(null);
 const sides = ref([
-    {
-        name: "产品面1",
-        code: "1",
-    },
-    {
-        name: "产品面2",
-        code: "2",
-    },
+    { id: 1, name: "产品面1" },
+    { id: 2, name: "产品面2" },
+    { id: 3, name: "产品面3" },
 ]);
 const missionModes = ref([
-    {
-        name: "普通模式",
-        code: "1",
-    },
-    {
-        name: "自循环模式",
-        code: "2",
-    },
-    {
-        name: "PLC自循环模式",
-        code: "3",
-    },
-    {
-        name: "ModBus自循环模式",
-        code: "4",
-    },
-    {
-        name: "MES交互模式",
-        code: "5",
-    },
+    { id: 1, name: "普通模式" },
+    { id: 1, name: "自循环模式" },
+    { id: 1, name: "PLC自循环模式" },
+    { id: 1, name: "ModBus自循环模式" },
+    { id: 1, name: "MES交互模式" },
 ]);
 
 const search = (event) => {
-    items.value = ["测试任务1", "测试任务2", "测试任务3"].map((item) => event.query + '-' + item);
+    if (!isStringEmpty(event.query)) {
+        items.value = products.value.filter(product => product.name.toLowerCase().includes(event.query.toLowerCase()));
+    } else {
+        items.value = products.value.slice();
+    }
 }
+
+const productMissionSelectd = (event) => workplaceProductStore.workplaceProduct.productMission = event.value;
+const sideSelectd = (event) => workplaceProductStore.workplaceProduct.side = event.value;
+const missionModeSelectd = (event) => workplaceProductStore.workplaceProduct.missionMode = event.value;
+
+onMounted(() => {
+    if (workplaceProductStore.workplaceProduct.productMission) {
+        productMissionObj.value = workplaceProductStore.workplaceProduct.productMission;
+    }
+    if (workplaceProductStore.workplaceProduct.side) {
+        productSideObj.value = workplaceProductStore.workplaceProduct.side;
+    }
+    if (workplaceProductStore.workplaceProduct.missionMode) {
+        missionModeObj.value = workplaceProductStore.workplaceProduct.missionMode;
+    }
+});
 </script>
 
 <template>
@@ -54,18 +64,22 @@ const search = (event) => {
         <Toolbar class="toolbar">
             <template #start>
                 <FloatLabel class="sm:w-52 sxga:w-60 hdp:w-64 fhd:w-72" variant="on">
-                    <AutoComplete v-model="missionName" dropdown inputId="on_label" :suggestions="items" @complete="search" class="autocomplete w-full" />
+                    <AutoComplete v-model="productMissionObj" dropdown inputId="on_label" 
+                                    optionLabel="name" :suggestions="items" class="autocomplete w-full"
+                                    @complete="search" @item-select="productMissionSelectd" />
                     <label for="on_label">任务名称</label>
                 </FloatLabel>
-                <FloatLabel class="sm:w-32 sxga:w-36 hdp:w-40 fhd:w-48 sxga:ml-3 sm:ml-2" variant="on">
-                    <Select v-model="sideName" inputId="on_label" :options="sides" optionLabel="name" class="select w-full" />
+                <FloatLabel class="sm:w-32 sxga:w-36 hdp:w-40 fhd:w-48 sxga:ml-3 sm:ml-1.5" variant="on">
+                    <Select v-model="productSideObj" inputId="on_label" :options="sides" optionLabel="name" dark="true" class="select w-full"
+                            @change="sideSelectd" />
                     <label for="on_label">产品面</label>
                 </FloatLabel>
             </template>
 
             <template #end>
                 <FloatLabel class="sm:w-44 sxga:w-48 hdp:w-52 fhd:w-56" variant="on">
-                    <Select v-model="missionMode" inputId="on_label" :options="missionModes" optionLabel="name" class="select w-full" />
+                    <Select v-model="missionModeObj" inputId="on_label" :options="missionModes" optionLabel="name" class="select w-full"
+                            @change="missionModeSelectd" />
                     <label for="on_label">任务模式</label>
                 </FloatLabel>
                 <Button label="启动任务" severity="success" />
@@ -81,12 +95,12 @@ const search = (event) => {
 
 <style scoped>
 .toolbar {
-    @apply bg-gray-400 border-none rounded-none sxga:p-3 sxga:pt-4 sm:p-2 sm:pt-3;
+    @apply bg-gray-400 border-none rounded-none sxga:p-3 sxga:pt-4 sm:p-1.5 sm:pt-2.5;
 }
 .autocomplete, .select {
-    @apply bg-gray-400 sxga:h-10 sxga:text-base sm:h-9 sm:text-sm;
+    @apply sxga:h-10 sxga:text-base sm:h-9 sm:text-sm;
 }
 button {
-    @apply font-black sxga:ml-3 sxga:h-10 sxga:text-sm sm:ml-2 sm:h-9 sm:text-sm;
+    @apply font-black sxga:ml-3 sxga:h-10 sxga:text-sm sm:ml-1.5 sm:h-9 sm:text-sm;
 }
 </style>

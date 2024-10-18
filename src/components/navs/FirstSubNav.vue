@@ -2,7 +2,7 @@
 import { onMounted, ref, onUnmounted, nextTick } from 'vue'
 import SubMenu from './SubMenu.vue'
 import { useRouter } from 'vue-router'
-import { debounce } from 'lodash'; // Add this import at the top of your file
+import { debounce } from 'lodash';
 
 const props = defineProps({
     menus: Array,

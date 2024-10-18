@@ -29,8 +29,8 @@ const switchIcon = computed(() => isIconMode.value
     : 'M4 6h16v4H4V6zm0 8h16v4H4v-4z'  // Full mode (switch to icon mode)
 );
 const switchButtonSize = computed(() => isIconMode.value
-    ? "absolute sxga:w-6 sxga:h-6 sxga:bottom-2 sxga:right-2 sm:w-5 sm:h-5 sm:bottom-1 sm:right-1"
-    : "absolute sxga:w-7 sxga:h-7 sxga:bottom-3 sxga:right-3 sm:w-6 sm:h-6 sm:bottom-2 sm:right-2"
+    ? "absolute sxga:w-6 sxga:h-6 sxga:top-2 sxga:right-2 sm:w-5 sm:h-5 sm:top-1 sm:right-1"
+    : "absolute sxga:w-7 sxga:h-7 sxga:top-3 sxga:right-3 sm:w-6 sm:h-6 sm:top-2 sm:right-2"
 );
 
 function toggleIconMode() {
