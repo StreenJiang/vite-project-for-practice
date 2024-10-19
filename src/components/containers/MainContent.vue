@@ -23,9 +23,11 @@ const hasSubMenu = computed(() => {
 </template>
 
 <style scoped>
-.v-enter-active,
+.v-enter-active {
+  transition: all .2s ease;
+}
 .v-leave-active {
-  transition: all .15s ease;
+  transition: all .05s ease;
 }
 
 .v-enter-from,

@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require('electron');
 
 // 等待Electron应用就绪后创建BrowserWindow窗口
 app.whenReady().then(async () => {
-    const win = await new BrowserWindow({
+    const win = new BrowserWindow({
         width: 1024,
         height: 768,
 

@@ -14,6 +14,7 @@ const productBarCode = ref(null);
         <InputIcon>
             <ScanBarCodeSvg class="size-4 fill-gray-900" />
         </InputIcon>
-        <InputText v-model="productBarCode" placeholder="点击或直接扫码录入产品条码信息" class="w-full h-full" />
+        <InputText v-model="productBarCode" placeholder="点击或直接扫码录入产品条码信息" 
+                class="w-full h-full" />
     </IconField>
 </template>

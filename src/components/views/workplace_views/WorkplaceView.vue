@@ -7,18 +7,21 @@ import Select from 'primevue/select';
 import FloatLabel from 'primevue/floatlabel';
 import Layout1 from './layouts/Layout1.vue';
 import { isStringEmpty } from "../../../js/utils/utils";
-import { useWorkplaceProductStore } from "../../../stores/workplaceProduct";
+import { useWorkplaceStore } from "../../../stores/workplace";
+import { useProductMissionStore } from "../../../stores/productMission";
 
-const workplaceProductStore = useWorkplaceProductStore();
+const workplaceStore = useWorkplaceStore();
+const productMissionStore = useProductMissionStore();
+
 const productMissionObj = ref(null);
 const productSideObj = ref(null);
 const missionModeObj = ref(null);
 
 const products = ref([
     { id: 1, name: "测试任务1号" },
-    { id: 2, name: "测试任务2号" },
-    { id: 3, name: "测试任务3号" },
-    { id: 4, name: "测试任务4号" },
+    { id: 2, name: "战斗准备中" },
+    { id: 3, name: "绝对是第一名" },
+    { id: 4, name: "我不是最后的" },
 ]);
 const items = ref(null);
 const sides = ref([
@@ -42,19 +45,23 @@ const search = (event) => {
     }
 }
 
-const productMissionSelectd = (event) => workplaceProductStore.workplaceProduct.productMission = event.value;
-const sideSelectd = (event) => workplaceProductStore.workplaceProduct.side = event.value;
-const missionModeSelectd = (event) => workplaceProductStore.workplaceProduct.missionMode = event.value;
+const productMissionSelectd = (event) => workplaceStore.workplace.productMission = event.value;
+const sideSelectd = (event) => workplaceStore.workplace.side = event.value;
+const missionModeSelectd = (event) => productMissionStore.setMissionMode(event.value);
 
 onMounted(() => {
-    if (workplaceProductStore.workplaceProduct.productMission) {
-        productMissionObj.value = workplaceProductStore.workplaceProduct.productMission;
+    // Get workplace data
+    if (workplaceStore.workplace.productMission) {
+        productMissionObj.value = workplaceStore.workplace.productMission;
     }
-    if (workplaceProductStore.workplaceProduct.side) {
-        productSideObj.value = workplaceProductStore.workplaceProduct.side;
+    if (workplaceStore.workplace.side) {
+        productSideObj.value = workplaceStore.workplace.side;
     }
-    if (workplaceProductStore.workplaceProduct.missionMode) {
-        missionModeObj.value = workplaceProductStore.workplaceProduct.missionMode;
+
+    // Get product mission data
+    let missionMode = productMissionStore.getMissionMode();
+    if (missionMode.value) {
+        missionModeObj.value = missionMode.value;
     }
 });
 </script>
