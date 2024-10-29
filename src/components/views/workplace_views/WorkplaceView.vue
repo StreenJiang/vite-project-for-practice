@@ -10,6 +10,7 @@ import { isStringEmpty } from "../../../js/utils/utils";
 import { useWorkplaceStore } from "../../../stores/workplace";
 import { useProductMissionStore } from "../../../stores/productMission";
 
+// Get store data
 const workplaceStore = useWorkplaceStore();
 const productMissionStore = useProductMissionStore();
 
@@ -31,9 +32,9 @@ const sides = ref([
 ]);
 const missionModes = ref([
     { id: 1, name: "普通模式" },
-    { id: 1, name: "自循环模式" },
-    { id: 1, name: "PLC自循环模式" },
-    { id: 1, name: "ModBus自循环模式" },
+    { id: 1, name: "循环模式" },
+    { id: 1, name: "PLC循环模式" },
+    { id: 1, name: "ModBus循环模式" },
     { id: 1, name: "MES交互模式" },
 ]);
 
@@ -45,6 +46,7 @@ const search = (event) => {
     }
 }
 
+// Store data
 const productMissionSelectd = (event) => workplaceStore.workplace.productMission = event.value;
 const sideSelectd = (event) => workplaceStore.workplace.side = event.value;
 const missionModeSelectd = (event) => productMissionStore.setMissionMode(event.value);
@@ -102,7 +104,7 @@ onMounted(() => {
 
 <style scoped>
 .toolbar {
-    @apply bg-gray-400 border-none rounded-none sxga:p-3 sxga:pt-4 sm:p-1.5 sm:pt-2.5;
+    @apply bg-gray-400 border-none sxga:p-3 sxga:pt-4 sm:p-1.5 sxga:m-4 sxga:mb-0.5 sxga:rounded-md sm:pt-2.5 sm:m-2 sm:mb-0.5 sm:rounded-md;
 }
 .autocomplete, .select {
     @apply sxga:h-10 sxga:text-base sm:h-9 sm:text-sm;
