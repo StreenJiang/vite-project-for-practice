@@ -8,7 +8,6 @@ import Avatar from 'primevue/avatar';
 import OverlayBadge from 'primevue/overlaybadge';
 import 'primeicons/primeicons.css'
 
-
 const props = defineProps({
     menus: Array,
 });

@@ -6,6 +6,7 @@ import AutoComplete from 'primevue/autocomplete';
 import Select from 'primevue/select';
 import FloatLabel from 'primevue/floatlabel';
 import Layout1 from './layouts/Layout1.vue';
+import 'primeicons/primeicons.css'
 import { isStringEmpty } from "../../../js/utils/utils";
 import { useWorkplaceStore } from "../../../stores/workplace";
 import { useProductMissionStore } from "../../../stores/productMission";
@@ -91,8 +92,8 @@ onMounted(() => {
                             @change="missionModeSelectd" />
                     <label for="on_label">任务模式</label>
                 </FloatLabel>
-                <Button label="启动任务" severity="success" />
-                <Button label="终止任务" severity="danger" />
+                <Button icon="pi pi-play" label="启动任务" severity="success" />
+                <Button icon="pi pi-stop" label="终止任务" severity="danger" />
             </template>
         </Toolbar>
 
@@ -104,7 +105,7 @@ onMounted(() => {
 
 <style scoped>
 .toolbar {
-    @apply bg-gray-400 border-none sxga:p-3 sxga:pt-4 sm:p-1.5 sxga:m-4 sxga:mb-0.5 sxga:rounded-md sm:pt-2.5 sm:m-2 sm:mb-0.5 sm:rounded-md;
+    @apply bg-gray-400 border-none rounded-md sxga:p-3 sxga:pt-4 sxga:m-4 sxga:mb-0.5 sm:p-1.5 sm:pt-2.5 sm:m-2 sm:mb-0.5;
 }
 .autocomplete, .select {
     @apply sxga:h-10 sxga:text-base sm:h-9 sm:text-sm;

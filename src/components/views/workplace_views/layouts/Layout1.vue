@@ -3,6 +3,9 @@ import Image from 'primevue/image';
 import Barcode from '../widgets/barcode.vue';
 import Splitter from 'primevue/splitter';
 import SplitterPanel from 'primevue/splitterpanel';
+import UserId from '../widgets/UserId.vue';
+import UserName from '../widgets/UserName.vue';
+import ParameterSet from '../widgets/ParameterSet.vue';
 
 const test = (event) => {
     let left = Math.round(event.sizes[0])
@@ -28,9 +31,26 @@ const test = (event) => {
                 </div>
             </SplitterPanel>
             <SplitterPanel class="" :size="25" :minSize="20">
-                <div class="sxga:m-3 sm:m-1.5">
-                    Here has to place something....
-                </div>
+                <Splitter class="w-full h-full" style="border-radius: 0px; background-color: transparent; border: 0px;" :gutterSize="4" layout="vertical">
+                    <SplitterPanel class="sxga:mb-3 sm:mb-1" :size="25" :minSize="25">
+                        <div class="bg-gray-400 h-full flex flex-col justify-around rounded-md sxga:ml-3 sxga:mr-3 sm:ml-1.5 sm:mr-1.5">
+                            <UserId class="sxga:m-3 sxga:mt-4 sm:m-1.5 sm:mt-2.5" />
+                            <UserName class="sxga:m-3 sxga:mt-1 sm:m-1.5 sm:mt-0.5" />
+                            <ParameterSet class="sxga:m-3 sxga:mt-1 sm:m-1.5 sm:mt-0.5" />
+                        </div>
+                    </SplitterPanel>
+                    <SplitterPanel class="sxga:mt-3 sxga:mb-3 sm:mt-1 sm:mb-1" :size="35" :minSize="25">
+                        <div class="bg-gray-400 h-full flex flex-col rounded-md sxga:ml-3 sxga:mr-3 sm:ml-1.5 sm:mr-1.5">
+                            asdfsadfaf
+                        </div>
+                    </SplitterPanel>
+                    <SplitterPanel class="sxga:mt-3 sm:mt-1" :size="40" :minSize="30">
+                        <div class="bg-gray-400 h-full flex flex-col rounded-md sxga:ml-3 sxga:mr-3 sm:ml-1.5 sm:mr-1.5">
+                            asdfsadfaf
+                        </div>
+                    </SplitterPanel>
+                </Splitter>
+
             </SplitterPanel>
         </Splitter>
     </div>
