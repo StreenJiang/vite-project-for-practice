@@ -18,10 +18,6 @@ const routes = [
         component: () => import("../../components/views/mission_management_views/MissionManagementView.vue"),
     },
     {
-        path: "/event_log",
-        component: () => import("../../components/views/event_log_views/EventLogView.vue"),
-    },
-    {
         path: "/data_query",
         component: () => import("../../components/views/data_query_views/DataQueryView.vue"),
     },
