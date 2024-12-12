@@ -76,7 +76,7 @@ onMounted(() => {
                 <FloatLabel class="sm:w-52 sxga:w-60 hdp:w-64 fhd:w-72" variant="on">
                     <AutoComplete v-model="productMissionObj" dropdown inputId="on_label" 
                                     optionLabel="name" :suggestions="items" class="autocomplete w-full"
-                                    @complete="search" @item-select="productMissionSelectd" />
+                                    @complete="search" @option-select="productMissionSelectd" />
                     <label for="on_label">任务名称</label>
                 </FloatLabel>
                 <FloatLabel class="sm:w-32 sxga:w-36 hdp:w-40 fhd:w-48 sxga:ml-3 sm:ml-1.5" variant="on">

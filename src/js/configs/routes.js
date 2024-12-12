@@ -22,13 +22,13 @@ const routes = [
         component: () => import("../../components/views/data_query_views/DataQueryView.vue"),
     },
     {
-        path: "/variable_settings",
-        // component: () => import("../../components/views/VariableSettingsView.vue"),
-        redirect: "/variable_settings/account_management",
+        path: "/settings_info",
+        // component: () => import("../../components/views/SettingsInfoView.vue"),
+        redirect: "/settings_info/account_management",
         children: [
             {
                 path: "account_management",
-                component: () => import("../../components/views/variable_settings_views/VariableSettingsView.vue"),
+                component: () => import("../../components/views/settings_info_views/SettingsInfoView.vue"),
             }
         ],
     },
